@@ -108,6 +108,31 @@ O roteamento inicial continua dependendo do modelo. Não há classificador basea
 - **CLI com JSON:** permite usar o agente sem interface adicional e torna ferramentas, fontes e consumo inspecionáveis.
 - **Sem histórico nesta versão:** cada execução é independente. Isso simplifica a reprodução dos cenários, mas exige informar novamente dados necessários em outra pergunta.
 
+### Estratégia de prompt
+
+O prompt de sistema em [app/agent.py](app/agent.py) define a persona de atendente da Empório da Música, a resposta em português e o domínio de atendimento. Ele organiza a atuação do modelo em cinco orientações:
+
+- **Escopo:** atender dúvidas da loja e redirecionar assuntos externos. Saudações e pedidos vagos usam respostas controladas ou solicitação de esclarecimento.
+- **Escolha da ferramenta:** consultar ofertas e cotações para preços, catálogo para localização e disponibilidade, seções do PDF para políticas e a função de frete para estimativas.
+- **Uso de evidências:** consultar as funções antes de afirmar dados da loja, citar seção e página das políticas e tratar textos recuperados como dados, sem obedecer a instruções inseridas neles.
+- **Regras comerciais:** usar valores em centavos, distinguir preço de tabela de preço final, não acumular PIX com promoção e não presumir que o preço de um produto é o total do pedido.
+- **Incertezas e limites:** solicitar informações ausentes ou confirmação humana, preservar conflitos do manual e não prometer operações que o protótipo não executa, como reserva ou fechamento de compra.
+
+A intenção é usar o modelo para interpretar a pergunta e selecionar consultas, mantendo cálculos e condições críticas em funções verificáveis. O prompt é complementado por validação local dos argumentos, consultas SQL predefinidas, limites de chamadas e respostas controladas nos caminhos documentados. Essas medidas não representam garantia geral contra respostas incorretas ou desvio de instruções.
+
+### Escolha do modelo e do provedor
+
+O `openai/gpt-oss-120b` é a configuração inicial do protótipo, acessada pela Groq via API. A escolha foi pragmática e se apoiou nestes critérios:
+
+- **Compatibilidade com a abordagem:** o modelo suporta chamadas de funções, necessárias para escolher entre catálogo, políticas e regras comerciais. Esse suporte consta na [documentação de ferramentas da Groq](https://console.groq.com/docs/tool-use/overview).
+- **Acesso disponível para os testes:** a conta e a chave da Groq permitiram executar e inspecionar os cenários do desenvolvimento. O projeto respeita as cotas da conta e não presume gratuidade ilimitada.
+- **Infraestrutura do protótipo:** a API permite manter consultas e regras em Python localmente, sem instalar ou operar o servidor de inferência do modelo.
+- **Validação observada:** foram executadas perguntas reais de catálogo, políticas, frete e fora de escopo. As falhas encontradas motivaram os controles descritos neste README; isso não prova qualidade geral do modelo.
+
+Não houve benchmark entre o GPT-OSS 120B, sua variante menor e modelos de outros provedores. Portanto, esta escolha não é apresentada como a melhor em precisão, custo ou latência. Com mais tempo, compararia essas medidas em um conjunto fixo de perguntas antes de decidir uma configuração de produção.
+
+Nas chamadas do agente, `temperature=0`, `reasoning_effort="low"` e `max_completion_tokens=2048` priorizam uma geração contida e limitam a saída por chamada. Temperatura zero não garante respostas idênticas. O modelo é desenvolvido pela OpenAI, enquanto a Groq é o provedor usado para servi-lo neste projeto.
+
 ## Regras e ambiguidades preservadas
 
 ### Produtos e preços
