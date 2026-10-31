@@ -38,8 +38,10 @@ Use quote_product para cotacao por ID. Nao calcule descontos mentalmente nem
 acumule PIX com promocao. standard considera promocoes, sem presumir PIX.
 Nao ofereca itens indisponiveis. Para politicas use search_policies e cite
 documento, secao e pagina. Preserve condicoes, excecoes e ambiguidades; regras
-conflitantes exigem confirmacao humana. Relate conteudo do manual, sem parecer
-juridico. Frete, parcelas e pedidos ainda nao tem calculadora/consulta nesta
+conflitantes exigem confirmacao humana. Relate conteudo do manual, sem parecer juridico.
+O campo ambiguities contem anotacoes internas do sistema, nao texto do PDF.
+Nunca atribua seus codigos ou notas ao manual nem invente trechos de secoes.
+Frete, parcelas e pedidos ainda nao tem calculadora/consulta nesta
 etapa: pode citar regras do manual, mas nao inventar cotacoes ou dados de pedidos.
 Nao diga que comprou, reservou, aprovou devolucao ou alterou algo.
 Consulta com erro nao significa estoque zero. Se faltarem dados, diga a limitacao
@@ -126,6 +128,39 @@ def sources_from(result):
     return sources
 
 
+def installment_review(result):
+    """Exibe evidencia original em vez de gerar uma explicacao do conflito.
+
+O marcador e curadoria interna. Esta resposta conservadora nao aprova nem
+nega um plano especifico; uma calculadora de parcelas sera uma etapa separada.
+"""
+    if not any(a.get("code") == "installment_conflict"
+               for a in result.get("ambiguities", [])):
+        return None
+    sections = {s["section_id"]: s for s in
+                result.get("matches", []) + result.get("related_context", [])}
+    excerpts = []
+    for section_id in ("3", "3.1"):
+        section = sections.get(section_id)
+        if not section:
+            continue
+        # O texto vem do PDF consultado nesta execucao, sem limites inventados.
+        pages = ", ".join(str(p) for p in section["pages"])
+        excerpts.append(
+            f"{result['document']} — seção {section_id}, {section['title']} "
+            f"(página(s) {pages}):\n{section['text']}")
+    message = (
+        "A tabela geral de pagamento e as regras detalhadas apresentam "
+        "condições diferentes em algumas faixas de parcelamento.\n\n")
+    if excerpts:
+        message += "Trechos recuperados do documento:\n\n" + "\n\n".join(excerpts) + "\n\n"
+    message += (
+        "Confirme com a equipe qual condição se aplica à sua compra. "
+        "Esta resposta apresenta as regras originais e não aprova nem calcula "
+        "um plano de parcelamento.")
+    return message
+
+
 def run_agent(query, client, model=MODEL):
     if not isinstance(query, str) or not query.strip() or len(query) > 4000:
         raise ValueError("A pergunta deve ter de 1 a 4000 caracteres")
@@ -162,6 +197,7 @@ def run_agent(query, client, model=MODEL):
         messages.append({"role": "assistant", "content": msg.content,
                          "tool_calls": [{"id": c.id, "type": "function", "function": {
                              "name": c.function.name, "arguments": c.function.arguments}} for c in calls]})
+        reviews = []
         for call in calls:
             if count >= MAX_TOOL_CALLS:
                 result = {"status": "tool_limit", "message": "Limite atingido; use os dados ja consultados e explicite lacunas."}
@@ -173,8 +209,16 @@ def run_agent(query, client, model=MODEL):
             for source in sources_from(result):
                 if source not in sources:
                     sources.append(source)
+            review = installment_review(result) if call.function.name == "search_policies" else None
+            if review and review not in reviews:
+                reviews.append(review)
             messages.append({"role": "tool", "tool_call_id": call.id,
                              "content": json.dumps(result, ensure_ascii=False)})
+        if reviews:
+            # Nao pedir ao LLM que interprete livremente um conflito conhecido.
+            return {**base, "status": "needs_confirmation",
+                    "response": "\n\n".join(reviews),
+                    "response_origin": "policy_guard", "finish_reason": "policy_review"}
     return {**base, "status": "step_limit", "response": "Limite de etapas atingido sem concluir."}
 
 
