@@ -1,0 +1,6 @@
+pypdf==6.21.4
+numpy==2.5.5
+onnxruntime==1.32.0
+tokenizers==0.23.3
+pgserver==0.1.4
+psycopg[binary]==3.3.9

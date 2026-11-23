@@ -186,3 +186,7 @@ Com mais tempo, priorizaria histórico de conversa, avaliação com conjunto mai
 O ChatGPT foi usado de forma iterativa para propor a arquitetura, gerar e revisar módulos, elaborar testes e preparar documentação. O autor incorporou os arquivos ao projeto, configurou a chave localmente, executou os comandos e compartilhou as saídas reais para análise. A revisão dessas saídas revelou falhas que levaram às correções de parcelamento, frete e escopo, registradas em commits incrementais.
 
 Os testes locais com respostas de API simuladas não foram apresentados como chamadas reais ao modelo. Os exemplos de interação foram selecionados dos testes reais fornecidos pelo autor. A assistência por IA faz parte do workflow declarado deste protótipo.
+
+## Avaliação da recuperação de políticas
+
+[Comparação reproduzível entre BM25 e pgvector](evaluation/README.md) nas mesmas 20 perguntas sobre o manual, com os rótulos, rankings e limites do experimento.

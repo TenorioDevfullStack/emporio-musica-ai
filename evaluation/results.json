@@ -1,0 +1,232 @@
+{
+  "sections": 29,
+  "questions": 20,
+  "hits_at_3": {
+    "bm25": 6,
+    "pgvector": 15
+  },
+  "results": [
+    {
+      "question": "No sábado consigo ir à loja depois do almoço?",
+      "expected": "2",
+      "bm25": [],
+      "pgvector": [
+        "2",
+        "4.1",
+        "3"
+      ]
+    },
+    {
+      "question": "Que objetivo a empresa tem para os músicos da região?",
+      "expected": "1.1",
+      "bm25": [],
+      "pgvector": [
+        "1",
+        "1.1",
+        "10"
+      ]
+    },
+    {
+      "question": "Qual é a razão social que aparece no cadastro?",
+      "expected": "1.2",
+      "bm25": [
+        "1.2"
+      ],
+      "pgvector": [
+        "6",
+        "5",
+        "4.4"
+      ]
+    },
+    {
+      "question": "Quais meios vocês aceitam para quitar a compra?",
+      "expected": "3",
+      "bm25": [],
+      "pgvector": [
+        "4.1",
+        "6.2",
+        "7.3"
+      ]
+    },
+    {
+      "question": "Em seis vezes, qual o menor valor que pode ficar cada parcela?",
+      "expected": "3.1",
+      "bm25": [
+        "3.1",
+        "8.2",
+        "4.3"
+      ],
+      "pgvector": [
+        "6.2",
+        "4.3",
+        "3.1"
+      ]
+    },
+    {
+      "question": "O instrumento chegou da internet e mudei de ideia. Quem banca a volta?",
+      "expected": "4.1",
+      "bm25": [],
+      "pgvector": [
+        "1",
+        "10",
+        "cover"
+      ]
+    },
+    {
+      "question": "Comprei faz duas semanas e veio com defeito de fábrica. Consigo outro?",
+      "expected": "4.2",
+      "bm25": [
+        "4.2",
+        "4.1",
+        "8.1"
+      ],
+      "pgvector": [
+        "4.2",
+        "4.1",
+        "4.3"
+      ]
+    },
+    {
+      "question": "Ganhei o modelo azul mas queria o vermelho. Dá para mudar a cor?",
+      "expected": "4.3",
+      "bm25": [],
+      "pgvector": [
+        "4.3",
+        "8.3",
+        "6.2"
+      ]
+    },
+    {
+      "question": "A boquilha que levei entra nas exceções de troca?",
+      "expected": "4.4",
+      "bm25": [
+        "4",
+        "4.3",
+        "4.2"
+      ],
+      "pgvector": [
+        "6.2",
+        "7.3",
+        "5"
+      ]
+    },
+    {
+      "question": "Quanto custa mandar de motoboy um pedido de 300 reais em Campo Grande?",
+      "expected": "5.1",
+      "bm25": [],
+      "pgvector": [
+        "5.1",
+        "5.2",
+        "3"
+      ]
+    },
+    {
+      "question": "Moro em outra cidade. Posso escolher entre PAC e Sedex?",
+      "expected": "5.2",
+      "bm25": [],
+      "pgvector": [
+        "5.2",
+        "1",
+        "6"
+      ]
+    },
+    {
+      "question": "Depois que o pacote sai, onde recebo o código para acompanhar?",
+      "expected": "5.3",
+      "bm25": [],
+      "pgvector": [
+        "5.3",
+        "4.1",
+        "4"
+      ]
+    },
+    {
+      "question": "Em que época do ano tem campanha de aniversário?",
+      "expected": "6.1",
+      "bm25": [
+        "6.1"
+      ],
+      "pgvector": [
+        "2",
+        "6.1",
+        "6"
+      ]
+    },
+    {
+      "question": "Se o preço já baixou na promoção ainda ganho os cinco por cento no PIX?",
+      "expected": "6.2",
+      "bm25": [
+        "6.2",
+        "6.1",
+        "6"
+      ],
+      "pgvector": [
+        "6.2",
+        "7.3",
+        "4.3"
+      ]
+    },
+    {
+      "question": "Quanto tempo o atendente pode levar para responder durante o expediente?",
+      "expected": "7.1",
+      "bm25": [
+        "7.1"
+      ],
+      "pgvector": [
+        "7.1",
+        "4.1",
+        "2"
+      ]
+    },
+    {
+      "question": "Qual é a sequência de passos de uma conversa com o cliente?",
+      "expected": "7.2",
+      "bm25": [],
+      "pgvector": [
+        "7.2",
+        "7.1",
+        "7.3"
+      ]
+    },
+    {
+      "question": "O que a equipe deve oferecer quando o modelo saiu de linha?",
+      "expected": "7.3",
+      "bm25": [],
+      "pgvector": [
+        "7.3",
+        "6",
+        "4.3"
+      ]
+    },
+    {
+      "question": "Onde descubro quanto tempo a marca cobre meu instrumento?",
+      "expected": "8.2",
+      "bm25": [],
+      "pgvector": [
+        "4.2",
+        "1",
+        "4.3"
+      ]
+    },
+    {
+      "question": "A cobertura vale se eu deixar o instrumento cair?",
+      "expected": "8.3",
+      "bm25": [],
+      "pgvector": [
+        "8.3",
+        "4.2",
+        "10"
+      ]
+    },
+    {
+      "question": "Quero que apaguem meus dados pessoais. Como faço o pedido?",
+      "expected": "9",
+      "bm25": [],
+      "pgvector": [
+        "9",
+        "7.2",
+        "4.1"
+      ]
+    }
+  ]
+}
